@@ -2,6 +2,7 @@ package com.sabeeh.foursquareandroid
 
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -13,6 +14,7 @@ import coil.request.Disposable
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import com.sabeeh.foursquareandroid.databinding.ActivityMainBinding
+import com.sabeeh.foursquareandroid.utils.Constants
 import com.sabeeh.foursquareandroid.utils.NetworkResult
 import com.sabeeh.foursquareandroid.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,15 +27,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var _binding: ActivityMainBinding
     private lateinit var disposable: Disposable
     private var imageUrl: String? = null
+    private var headerAuth = Constants.API_KEY
+    private var params = HashMap<String, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
-        fetchData()
+        initGetPlacesParams()
+        fetchData(headerAuth, params)
         _binding.imgRefresh.setOnClickListener {
-            fetchResponse()
+            fetchResponse(headerAuth, params)
         }
         _binding.imgDownload.setOnClickListener {
             downloadImage(imageUrl)
@@ -41,24 +46,30 @@ class MainActivity : AppCompatActivity() {
         observeDownloadResponse()
     }
 
-    private fun fetchResponse() {
-        mainViewModel.fetchDogResponse()
+    private fun initGetPlacesParams()
+    {
+        params.put("ll", "40.732574046009255,-74.00513697311271")
+    }
+
+    private fun fetchResponse(headerAuth : String, params : Map<String, String>) {
+        mainViewModel.fetchPlacesResponse(headerAuth, params)
         _binding.pbDog.visibility = View.VISIBLE
     }
 
 
-    private fun fetchData() {
-        fetchResponse()
+    private fun fetchData(headerAuth: String, params : Map<String, String>) {
+        fetchResponse(headerAuth, params)
         mainViewModel.response.observe(this) { response ->
             when (response) {
                 is NetworkResult.Success -> {
                     response.data?.let {
-                        imageUrl = response.data.message
-                        _binding.imgDog.load(
-                            response.data.message
-                        ) {
-                            transformations(RoundedCornersTransformation(16f))
-                        }
+//                        imageUrl = response.data
+//                        _binding.imgDog.load(
+//                            response.data.message
+//                        ) {
+//                            transformations(RoundedCornersTransformation(16f))
+//                        }
+                        Log.d(Constants.TAG, "Response Successful")
                     }
                     _binding.pbDog.visibility = View.GONE
                 }
@@ -70,6 +81,7 @@ class MainActivity : AppCompatActivity() {
                         response.message,
                         Toast.LENGTH_SHORT
                     ).show()
+                    Log.d(Constants.TAG, "Response Failed ${response.message}")
                 }
 
                 is NetworkResult.Loading -> {

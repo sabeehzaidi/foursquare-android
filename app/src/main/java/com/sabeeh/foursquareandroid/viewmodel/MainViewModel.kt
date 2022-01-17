@@ -10,7 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sabeeh.foursquareandroid.data.Repository
-import com.sabeeh.foursquareandroid.model.DogResponse
+import com.sabeeh.foursquareandroid.model.PlacesResponse
 import com.sabeeh.foursquareandroid.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -26,14 +26,14 @@ class MainViewModel @Inject constructor
     application: Application
 ) : AndroidViewModel(application) {
 
-    private val _response: MutableLiveData<NetworkResult<DogResponse>> = MutableLiveData()
-    val response: LiveData<NetworkResult<DogResponse>> = _response
+    private val _response: MutableLiveData<NetworkResult<PlacesResponse>> = MutableLiveData()
+    val response: LiveData<NetworkResult<PlacesResponse>> = _response
 
     private val _downloadResponse: MutableLiveData<Boolean> = MutableLiveData()
     val downloadResponse = _downloadResponse
 
-    fun fetchDogResponse() = viewModelScope.launch {
-        repository.getDog().collect { values ->
+    fun fetchPlacesResponse(headerAuth : String, params : Map<String, String>) = viewModelScope.launch {
+        repository.getPlaces(headerAuth, params).collect { values ->
             _response.value = values
         }
     }

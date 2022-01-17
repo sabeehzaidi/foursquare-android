@@ -3,8 +3,9 @@ package com.sabeeh.foursquareandroid.utils
 class Constants {
 
     companion object {
+        const val TAG = "FoursquareDev"
         const val API_KEY = "fsq3smb6fWcZVFhmzBxm0LrSfFa7Igoa5e1fRa5TdtDj3mg="
-        const val BASE_URL = "https://dog.ceo/"
-        const val RANDOM_URL = "api/breeds/image/random"
+        const val BASE_URL = "https://api.foursquare.com/v3/"
+        const val PLACES_SEARCH = "places/search"
     }
 }

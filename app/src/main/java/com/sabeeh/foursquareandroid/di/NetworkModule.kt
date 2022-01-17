@@ -1,6 +1,6 @@
 package com.sabeeh.foursquareandroid.di
 
-import com.sabeeh.foursquareandroid.data.remote.DogService
+import com.sabeeh.foursquareandroid.data.remote.PlacesApiService
 import com.sabeeh.foursquareandroid.utils.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -45,7 +45,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideCurrencyService(retrofit: Retrofit): DogService =
-        retrofit.create(DogService::class.java)
+    fun provideCurrencyService(retrofit: Retrofit): PlacesApiService =
+        retrofit.create(PlacesApiService::class.java)
 
 }

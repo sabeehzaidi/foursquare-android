@@ -3,7 +3,7 @@ package com.sabeeh.foursquareandroid.data
 import android.graphics.Bitmap
 import com.sabeeh.foursquareandroid.data.remote.RemoteDataSource
 import com.sabeeh.foursquareandroid.model.BaseApiResponse
-import com.sabeeh.foursquareandroid.model.DogResponse
+import com.sabeeh.foursquareandroid.model.PlacesResponse
 import com.sabeeh.foursquareandroid.utils.NetworkResult
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.Dispatchers
@@ -21,9 +21,9 @@ class Repository @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : BaseApiResponse() {
 
-    suspend fun getDog(): Flow<NetworkResult<DogResponse>> {
-        return flow<NetworkResult<DogResponse>> {
-            emit(safeApiCall { remoteDataSource.getDog() })
+    suspend fun getPlaces(headerAuth : String, params : Map<String, String>): Flow<NetworkResult<PlacesResponse>> {
+        return flow<NetworkResult<PlacesResponse>> {
+            emit(safeApiCall { remoteDataSource.getPlaces(headerAuth, params) })
         }.flowOn(Dispatchers.IO)
     }
 
