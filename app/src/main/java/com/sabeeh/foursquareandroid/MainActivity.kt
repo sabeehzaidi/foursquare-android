@@ -53,9 +53,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchResponse(headerAuth : String, params : Map<String, String>) {
         mainViewModel.fetchPlacesResponse(headerAuth, params)
-        _binding.pbDog.visibility = View.VISIBLE
+        displayProgressBar(true)
     }
 
+    fun displayProgressBar(isDisplayed: Boolean)
+    {
+        _binding.progressBar.visibility = if(isDisplayed) View.VISIBLE else View.GONE
+    }
 
     private fun fetchData(headerAuth: String, params : Map<String, String>) {
         fetchResponse(headerAuth, params)
@@ -71,11 +75,11 @@ class MainActivity : AppCompatActivity() {
 //                        }
                         Log.d(Constants.TAG, "Response Successful")
                     }
-                    _binding.pbDog.visibility = View.GONE
+                    displayProgressBar(false)
                 }
 
                 is NetworkResult.Error -> {
-                    _binding.pbDog.visibility = View.GONE
+                    displayProgressBar(false)
                     Toast.makeText(
                         this,
                         response.message,
@@ -85,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is NetworkResult.Loading -> {
-                    _binding.pbDog.visibility = View.VISIBLE
+                    displayProgressBar(true)
                 }
             }
         }
