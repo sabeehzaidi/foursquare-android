@@ -45,12 +45,11 @@ class MapsFragment : Fragment() {
     private var headerAuth = Constants.API_KEY
     private var params = HashMap<String, String>()
     private var mapReady = false
+    val defaultLocation = LatLng(40.732574046009255,-74.00513697311271)
 
     private val mMapCallback = OnMapReadyCallback { googleMap ->
-        val defaultLocation = LatLng(40.732574046009255,-74.00513697311271)
         mapReady = true
         mMap = googleMap
-        mMap.addMarker(MarkerOptions().position(defaultLocation).title("Marker"))
         animateCameraToLocation(defaultLocation)
     }
 
@@ -71,13 +70,13 @@ class MapsFragment : Fragment() {
         mapsViewModel = ViewModelProvider(this, mapsViewModelFactory).get(MapsViewModel::class.java)
         mapFragment?.getMapAsync(mMapCallback)
 
-        initGetPlacesParams()
+        initGetPlacesParams(defaultLocation)
         fetchData(headerAuth, params)
     }
 
     fun updateMap()
     {
-        if(mapReady && places != null)
+        if(mapReady && places.results.isNotEmpty())
         {
             places.results.forEach() {
                 place ->
@@ -89,9 +88,9 @@ class MapsFragment : Fragment() {
         }
     }
 
-    private fun initGetPlacesParams()
+    private fun initGetPlacesParams(defaultLocation: LatLng)
     {
-        params.put("ll", "40.732574046009255,-74.00513697311271")
+        params.put("ll", "${defaultLocation.latitude},${defaultLocation.longitude}")
     }
 
     private fun fetchResponse(headerAuth : String, params : Map<String, String>) {
