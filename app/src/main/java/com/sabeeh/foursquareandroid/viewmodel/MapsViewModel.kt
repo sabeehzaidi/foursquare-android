@@ -19,8 +19,9 @@ class MapsViewModel @Inject constructor
     val response: LiveData<NetworkResult<PlacesResponse>> = _response
 
     fun fetchPlacesResponse(headerAuth : String, params : Map<String, String>) = viewModelScope.launch {
-        repository.getPlaces(headerAuth, params).collect { values ->
-            _response.value = values }
+        repository.getPlaces(headerAuth, params).collect {
+                values -> _response.value = values
+        }
     }
 
 }

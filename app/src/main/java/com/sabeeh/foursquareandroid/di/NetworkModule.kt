@@ -49,14 +49,4 @@ object NetworkModule {
     @Provides
     fun providePlacesApiService(retrofit: Retrofit): PlacesApiService =
         retrofit.create(PlacesApiService::class.java)
-
-    @Singleton
-    @Provides
-    fun provideRepository(remoteDataSource : RemoteDataSource) : Repository =
-        Repository(remoteDataSource)
-
-    @Singleton
-    @Provides
-    fun provideRemoteDataSource(placesApiService: PlacesApiService) : RemoteDataSource =
-        RemoteDataSource(placesApiService)
 }
