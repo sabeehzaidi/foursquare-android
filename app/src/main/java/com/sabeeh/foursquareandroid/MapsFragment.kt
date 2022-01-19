@@ -3,13 +3,12 @@ package com.sabeeh.foursquareandroid
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import coil.load
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -18,10 +17,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.sabeeh.foursquareandroid.data.Repository
-import com.sabeeh.foursquareandroid.databinding.ActivityMainBinding
 import com.sabeeh.foursquareandroid.databinding.FragmentMapsBinding
-import com.sabeeh.foursquareandroid.utils.AnalyticsService
-import com.sabeeh.foursquareandroid.utils.AnalyticsServiceImpl
+import com.sabeeh.foursquareandroid.model.places.Results
+import com.sabeeh.foursquareandroid.logging.AnalyticsService
+import com.sabeeh.foursquareandroid.model.places.PlacesResponse
 import com.sabeeh.foursquareandroid.utils.Constants
 import com.sabeeh.foursquareandroid.utils.NetworkResult
 import com.sabeeh.foursquareandroid.viewmodel.MapsViewModel
@@ -40,22 +39,25 @@ class MapsFragment : Fragment() {
     private lateinit var mapsViewModel: MapsViewModel
     private lateinit var mapsViewModelFactory: MapsViewModelFactory
     private lateinit var _binding: FragmentMapsBinding
-    private var headerAuth = Constants.API_KEY
-    private var params = HashMap<String, String>()
+    private lateinit var places: PlacesResponse
     private lateinit var mMap : GoogleMap
 
-    private val callback = OnMapReadyCallback { googleMap ->
-        val sydney = LatLng(-34.0, 151.0)
+    private var headerAuth = Constants.API_KEY
+    private var params = HashMap<String, String>()
+    private var mapReady = false
+    val defaultLocation = LatLng(40.732574046009255,-74.00513697311271)
+
+    private val mMapCallback = OnMapReadyCallback { googleMap ->
+        mapReady = true
         mMap = googleMap
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        animateCameraToLocation(defaultLocation)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
         return _binding.root
     }
@@ -63,18 +65,32 @@ class MapsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
 
         mapsViewModelFactory = MapsViewModelFactory(repository)
         mapsViewModel = ViewModelProvider(this, mapsViewModelFactory).get(MapsViewModel::class.java)
+        mapFragment?.getMapAsync(mMapCallback)
 
-        initGetPlacesParams()
+        initGetPlacesParams(defaultLocation)
         fetchData(headerAuth, params)
     }
 
-    private fun initGetPlacesParams()
+    fun updateMap()
     {
-        params.put("ll", "40.732574046009255,-74.00513697311271")
+        if(mapReady && places.results.isNotEmpty())
+        {
+            places.results.forEach() {
+                place ->
+                if(place.geocodes?.main?.longitude != null && place?.geocodes?.main?.latitude != null)
+                {
+                    mMap.addMarker(MarkerOptions().position(LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)).title(place.name))
+                }
+            }
+        }
+    }
+
+    private fun initGetPlacesParams(defaultLocation: LatLng)
+    {
+        params.put("ll", "${defaultLocation.latitude},${defaultLocation.longitude}")
     }
 
     private fun fetchResponse(headerAuth : String, params : Map<String, String>) {
@@ -87,7 +103,9 @@ class MapsFragment : Fragment() {
             when (response) {
                 is NetworkResult.Success -> {
                     response.data?.let {
+                        it -> this.places = it
                         analyticsService.logEvent("Response Successful. ${response.data.results}")
+                        updateMap()
                     }
                 }
 
@@ -106,5 +124,13 @@ class MapsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun animateCameraToLocation(currentLocation: LatLng) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+        // Zoom in, animating the camera.
+        mMap.animateCamera(CameraUpdateFactory.zoomIn())
+        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
     }
 }

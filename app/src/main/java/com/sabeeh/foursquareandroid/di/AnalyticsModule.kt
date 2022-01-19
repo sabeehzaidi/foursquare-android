@@ -1,7 +1,7 @@
 package com.sabeeh.foursquareandroid.di
 
-import com.sabeeh.foursquareandroid.utils.AnalyticsService
-import com.sabeeh.foursquareandroid.utils.AnalyticsServiceImpl
+import com.sabeeh.foursquareandroid.logging.AnalyticsService
+import com.sabeeh.foursquareandroid.logging.AnalyticsServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

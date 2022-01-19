@@ -1,6 +1,7 @@
-package com.sabeeh.foursquareandroid.utils
+package com.sabeeh.foursquareandroid.logging
 
 import android.util.Log
+import com.sabeeh.foursquareandroid.utils.Constants
 
 class AnalyticsServiceImpl : AnalyticsService {
 
