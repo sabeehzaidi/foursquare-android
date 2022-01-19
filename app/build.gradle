@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
     def coroutinesVersion = '1.4.3'
     def retrofitVersion = "2.9.0"
     def lifeCycleVersion = '2.2.0'
@@ -89,6 +91,7 @@ dependencies {
     // Hilt ViewModel extension
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltLifeCycleVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltLifeCycleVersion"
+    kapt "com.google.dagger:hilt-compiler:$daggerHiltVersion"
 
     //for image rendering
     implementation "io.coil-kt:coil:$coilVersion"

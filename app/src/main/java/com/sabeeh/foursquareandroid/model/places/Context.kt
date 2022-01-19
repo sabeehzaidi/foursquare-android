@@ -1,4 +1,4 @@
-package com.sabeeh.foursquareandroid
+package com.sabeeh.foursquareandroid.model.places
 
 import com.google.gson.annotations.SerializedName
 
