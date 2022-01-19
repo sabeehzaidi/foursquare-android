@@ -1,6 +1,8 @@
 package com.sabeeh.foursquareandroid.di
 
+import com.sabeeh.foursquareandroid.data.Repository
 import com.sabeeh.foursquareandroid.data.remote.PlacesApiService
+import com.sabeeh.foursquareandroid.data.remote.RemoteDataSource
 import com.sabeeh.foursquareandroid.utils.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -45,7 +47,16 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideCurrencyService(retrofit: Retrofit): PlacesApiService =
+    fun providePlacesApiService(retrofit: Retrofit): PlacesApiService =
         retrofit.create(PlacesApiService::class.java)
 
+    @Singleton
+    @Provides
+    fun provideRepository(remoteDataSource : RemoteDataSource) : Repository =
+        Repository(remoteDataSource)
+
+    @Singleton
+    @Provides
+    fun provideRemoteDataSource(placesApiService: PlacesApiService) : RemoteDataSource =
+        RemoteDataSource(placesApiService)
 }
