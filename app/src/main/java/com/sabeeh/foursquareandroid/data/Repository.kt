@@ -3,7 +3,7 @@ package com.sabeeh.foursquareandroid.data
 import android.graphics.Bitmap
 import com.sabeeh.foursquareandroid.data.remote.RemoteDataSource
 import com.sabeeh.foursquareandroid.model.BaseApiResponse
-import com.sabeeh.foursquareandroid.model.PlacesResponse
+import com.sabeeh.foursquareandroid.model.places.PlacesResponse
 import com.sabeeh.foursquareandroid.utils.NetworkResult
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.Dispatchers

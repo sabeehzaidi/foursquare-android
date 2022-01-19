@@ -11,12 +11,16 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.sabeeh.foursquareandroid.data.Repository
+import com.sabeeh.foursquareandroid.databinding.ActivityMainBinding
 import com.sabeeh.foursquareandroid.databinding.FragmentMapsBinding
+import com.sabeeh.foursquareandroid.utils.AnalyticsService
+import com.sabeeh.foursquareandroid.utils.AnalyticsServiceImpl
 import com.sabeeh.foursquareandroid.utils.Constants
 import com.sabeeh.foursquareandroid.utils.NetworkResult
 import com.sabeeh.foursquareandroid.viewmodel.MapsViewModel
@@ -29,11 +33,15 @@ class MapsFragment : Fragment() {
     @Inject
     lateinit var repository: Repository
 
+    @Inject
+    lateinit var analyticsService : AnalyticsService
+
     private lateinit var mapsViewModel: MapsViewModel
     private lateinit var mapsViewModelFactory: MapsViewModelFactory
     private lateinit var _binding: FragmentMapsBinding
     private var headerAuth = Constants.API_KEY
     private var params = HashMap<String, String>()
+    private lateinit var mMap : GoogleMap
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -46,8 +54,9 @@ class MapsFragment : Fragment() {
          * user has installed Google Play services and returned to the app.
          */
         val sydney = LatLng(-34.0, 151.0)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        mMap = googleMap
+        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
     override fun onCreateView(
@@ -70,10 +79,6 @@ class MapsFragment : Fragment() {
         fetchData(headerAuth, params)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     private fun initGetPlacesParams()
     {
         params.put("ll", "40.732574046009255,-74.00513697311271")
@@ -89,29 +94,22 @@ class MapsFragment : Fragment() {
             when (response) {
                 is NetworkResult.Success -> {
                     response.data?.let {
-//                        imageUrl = response.data
-//                        _binding.imgDog.load(
-//                            response.data.message
-//                        ) {
-//                            transformations(RoundedCornersTransformation(16f))
-//                        }
-                        Log.d(Constants.TAG, "Response Successful")
+                        analyticsService.logEvent("Response Successful")
                     }
-//                    displayProgressBar(false)
                 }
 
                 is NetworkResult.Error -> {
-//                    displayProgressBar(false)
                     Toast.makeText(
                         context,
                         response.message,
                         Toast.LENGTH_SHORT
                     ).show()
-                    Log.d(Constants.TAG, "Response Failed ${response.message}")
+                    analyticsService.logEvent("Response Failed")
+
                 }
 
                 is NetworkResult.Loading -> {
-//                    displayProgressBar(true)
+                    analyticsService.logEvent("Loading ...")
                 }
             }
         }

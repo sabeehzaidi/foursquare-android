@@ -1,8 +1,6 @@
-package com.sabeeh.foursquareandroid.model
+package com.sabeeh.foursquareandroid.model.places
 
 import com.google.gson.annotations.SerializedName
-import com.sabeeh.foursquareandroid.Context
-import com.sabeeh.foursquareandroid.Results
 
 data class PlacesResponse(
     @SerializedName("results" ) var results : ArrayList<Results> = arrayListOf(),

@@ -2,7 +2,7 @@ package com.sabeeh.foursquareandroid.viewmodel
 
 import androidx.lifecycle.*
 import com.sabeeh.foursquareandroid.data.Repository
-import com.sabeeh.foursquareandroid.model.PlacesResponse
+import com.sabeeh.foursquareandroid.model.places.PlacesResponse
 import com.sabeeh.foursquareandroid.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
