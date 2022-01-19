@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.Fragment
 import coil.ImageLoader
 import coil.load
 import coil.request.Disposable
@@ -31,17 +32,14 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
-        replaceFragment()
+        var mapsFragment = MapsFragment()
+        replaceFragment(mapsFragment)
     }
 
-    private fun replaceFragment()
+    private fun replaceFragment(fragment: Fragment)
     {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, MapsFragment())
+            .replace(R.id.fragmentContainer, fragment)
             .commitNow()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }

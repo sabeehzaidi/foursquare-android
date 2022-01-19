@@ -26,34 +26,5 @@ class Repository @Inject constructor(
             emit(safeApiCall { remoteDataSource.getPlaces(headerAuth, params) })
         }.flowOn(Dispatchers.IO)
     }
-
-    fun saveImage(image: Bitmap, storageDir: File, imageFileName: String): Flow<Boolean> {
-
-        val successDirCreated = if (!storageDir.exists()) {
-            storageDir.mkdir()
-        } else {
-            true
-        }
-
-        if (successDirCreated) {
-            val imageFile = File(storageDir, imageFileName)
-            return try {
-                val fOut: OutputStream = FileOutputStream(imageFile)
-                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
-                fOut.close()
-                flow {
-                    emit(true)
-                }.flowOn(Dispatchers.IO)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                flow {
-                    emit(false)
-                }.flowOn(Dispatchers.IO)
-            }
-        } else {
-            return flow { emit(false) }.flowOn(Dispatchers.IO)
-        }
-    }
-
 }
 
