@@ -38,7 +38,6 @@ class MainViewModel @Inject constructor
         }
     }
 
-
     fun downloadImage(bitmap: Bitmap, dir: File, fileName: String) {
         viewModelScope.launch {
             repository.saveImage(bitmap, dir, fileName).collect { value ->

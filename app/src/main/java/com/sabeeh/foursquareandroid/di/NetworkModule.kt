@@ -45,7 +45,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideCurrencyService(retrofit: Retrofit): PlacesApiService =
+    fun providePlacesApiService(retrofit: Retrofit): PlacesApiService =
         retrofit.create(PlacesApiService::class.java)
 
 }
