@@ -15,10 +15,10 @@ class MainViewModel @Inject constructor
     application: Application
 ) : AndroidViewModel(application) {
 
-    fun replaceFragment(supportFragmentManager: FragmentManager, fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
-            .commitNow()
-    }
+  fun replaceFragment(supportFragmentManager: FragmentManager, fragment: Fragment) {
+      supportFragmentManager.beginTransaction()
+          .replace(R.id.fragmentContainer, fragment)
+          .commitNow()
+  }
 
 }
