@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,7 +17,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.sabeeh.foursquareandroid.data.Repository
 import com.sabeeh.foursquareandroid.databinding.FragmentMapsBinding
-import com.sabeeh.foursquareandroid.model.places.Results
 import com.sabeeh.foursquareandroid.logging.AnalyticsService
 import com.sabeeh.foursquareandroid.model.places.PlacesResponse
 import com.sabeeh.foursquareandroid.utils.Constants
@@ -42,7 +40,7 @@ class MapsFragment : Fragment() {
     private lateinit var places: PlacesResponse
     private lateinit var mMap : GoogleMap
 
-    private var headerAuth = Constants.API_KEY
+    private var headerAuth = Constants.FOURSQUARE_API_KEY
     private var params = HashMap<String, String>()
     private var mapReady = false
     val defaultLocation = LatLng(40.732574046009255,-74.00513697311271)
