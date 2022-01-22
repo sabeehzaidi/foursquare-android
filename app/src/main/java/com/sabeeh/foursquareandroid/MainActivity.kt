@@ -1,12 +1,14 @@
 package com.sabeeh.foursquareandroid
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.sabeeh.foursquareandroid.databinding.ActivityMainBinding
 import com.sabeeh.foursquareandroid.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.layout_bottom_sheet.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -20,6 +22,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(_binding.root)
 
         var mapsFragment = MapsFragment()
+        replaceFragment(mapsFragment)
+    }
+
+    fun replaceFragment(mapsFragment: Fragment) {
         mainViewModel.replaceFragment(supportFragmentManager, mapsFragment)
     }
 }

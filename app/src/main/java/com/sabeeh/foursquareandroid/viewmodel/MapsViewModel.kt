@@ -1,6 +1,10 @@
 package com.sabeeh.foursquareandroid.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.*
+import com.sabeeh.foursquareandroid.MainActivity
+import com.sabeeh.foursquareandroid.MainActivity_GeneratedInjector
+import com.sabeeh.foursquareandroid.PlaceDetailsFragment
 import com.sabeeh.foursquareandroid.data.Repository
 import com.sabeeh.foursquareandroid.model.places.PlacesResponse
 import com.sabeeh.foursquareandroid.model.places.PlaceDetails
