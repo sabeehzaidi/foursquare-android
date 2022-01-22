@@ -24,7 +24,7 @@ class MapsViewModel @Inject constructor
 
     fun fetchPlacesResponse(headerAuth : String, params : Map<String, String>) = viewModelScope.launch {
         repository.getPlaces(headerAuth, params).collect {
-                values -> _response.value = values
+            values -> _response.value = values
         }
     }
 

@@ -99,7 +99,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         {
             places.results.forEach() {
                 place ->
-                if(place.geocodes?.main?.longitude != null && place?.geocodes?.main?.latitude != null)
+                if(place.geocodes?.main?.longitude != null && place.geocodes?.main?.latitude != null)
                 {
                     mMap.addMarker(MarkerOptions().position(LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)).title(place.name))
                 }
