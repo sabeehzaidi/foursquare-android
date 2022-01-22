@@ -3,4 +3,5 @@
     <string name="dog_image">Dog Image</string>
     <string name="refresh">Refresh</string>
     <string name="dogs">Dogs</string>
+    <string name="distance_away">\" away\"</string>
 </resources>

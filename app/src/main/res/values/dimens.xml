@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_standard_16">16dp</dimen>
+    <dimen name="venue_image_size_35">35dp</dimen>
+    <dimen name="venue_name_size_16">16sp</dimen>
+    <dimen name="button_text_size_12">12sp</dimen>
+    <dimen name="venue_image_size_80">80dp</dimen>
+</resources>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -14,7 +15,9 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sabeeh.foursquareandroid.data.Repository
 import com.sabeeh.foursquareandroid.databinding.FragmentMapsBinding
 import com.sabeeh.foursquareandroid.logging.AnalyticsService
@@ -23,10 +26,12 @@ import com.sabeeh.foursquareandroid.utils.Constants
 import com.sabeeh.foursquareandroid.utils.NetworkResult
 import com.sabeeh.foursquareandroid.viewmodel.MapsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.layout_bottom_sheet.*
+import kotlinx.android.synthetic.main.layout_bottom_sheet.bottomSheet
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MapsFragment : Fragment() {
+class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     @Inject
     lateinit var repository: Repository
@@ -39,6 +44,7 @@ class MapsFragment : Fragment() {
     private lateinit var _binding: FragmentMapsBinding
     private lateinit var places: PlacesResponse
     private lateinit var mMap : GoogleMap
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     private var headerAuth = Constants.FOURSQUARE_API_KEY
     private var params = HashMap<String, String>()
@@ -49,6 +55,8 @@ class MapsFragment : Fragment() {
         mapReady = true
         mMap = googleMap
         animateCameraToLocation(defaultLocation)
+        mMap.setOnMarkerClickListener(this)
+        mMap.setOnInfoWindowClickListener(this)
     }
 
     override fun onCreateView(
@@ -67,6 +75,19 @@ class MapsFragment : Fragment() {
         mapsViewModelFactory = MapsViewModelFactory(repository)
         mapsViewModel = ViewModelProvider(this, mapsViewModelFactory).get(MapsViewModel::class.java)
         mapFragment?.getMapAsync(mMapCallback)
+        setBottomSheetObserver()
+
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        setBottomSheetState(BottomSheetBehavior.STATE_COLLAPSED)
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                analyticsService.logEvent("New State: $newState")
+            }
+        })
 
         initGetPlacesParams(defaultLocation)
         fetchData(headerAuth, params)
@@ -93,6 +114,16 @@ class MapsFragment : Fragment() {
 
     private fun fetchResponse(headerAuth : String, params : Map<String, String>) {
         mapsViewModel.fetchPlacesResponse(headerAuth, params)
+    }
+
+    private val _defaultDistanceUnit = "m"
+    private fun setBottomSheetObserver()
+    {
+        mapsViewModel.selectedPlace.observe(requireActivity()) { data ->
+            venueName.text = data.name
+            venueAddress.text = data.location?.address ?: "..."
+            venueDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(getString(R.string.distance_away))
+        }
     }
 
     private fun fetchData(headerAuth: String, params : Map<String, String>) {
@@ -131,4 +162,22 @@ class MapsFragment : Fragment() {
         // Zoom out to zoom level 10, animating with a duration of 2 seconds.
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
     }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        analyticsService.logEvent("Marker ${marker.title} tapped")
+        setBottomSheetState(BottomSheetBehavior.STATE_EXPANDED)
+        mapsViewModel.setSelectedPlace(places.results.find { it.name == marker.title })
+        return false
+    }
+
+    fun setBottomSheetState(state: Int)
+    {
+        bottomSheetBehavior.state = state
+    }
+
+    override fun onInfoWindowClick(marker: Marker) {
+        analyticsService.logEvent("Info for ${marker.title} tapped")
+    }
+
+
 }

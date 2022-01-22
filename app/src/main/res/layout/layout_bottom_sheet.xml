@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:paddingBottom="@dimen/margin_standard_16"
+    android:id="@+id/bottomSheet"
+    app:behavior_peekHeight="0dp"
+    app:behavior_hideable="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <ImageView
+        android:id="@+id/venueImage"
+        android:layout_width="@dimen/venue_image_size_80"
+        android:layout_height="@dimen/venue_image_size_80"
+        android:layout_marginStart="@dimen/margin_standard_16"
+        android:layout_marginTop="@dimen/margin_standard_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/venueName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Venue Name"
+        android:textColor="#292929"
+        android:textSize="@dimen/venue_name_size_16"
+        app:layout_constraintStart_toEndOf="@+id/venueImage"
+        app:layout_constraintTop_toTopOf="@+id/venueImage" />
+
+    <TextView
+        android:id="@+id/venueDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Venue Distance"
+        android:textColor="#292929"
+        android:textSize="@dimen/venue_name_size_16"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/venueImage"
+        app:layout_constraintTop_toBottomOf="@+id/venueName" />
+
+    <TextView
+        android:id="@+id/venueAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Venue Address"
+        android:textColor="#292929"
+        android:textSize="@dimen/venue_name_size_16"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/venueImage"
+        app:layout_constraintTop_toBottomOf="@+id/venueDistance" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnVenueDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Details"
+        android:textSize="@dimen/button_text_size_12"
+        app:layout_constraintBottom_toBottomOf="@+id/venueImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/venueImage"
+        android:layout_marginEnd="@dimen/margin_standard_16"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
