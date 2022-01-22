@@ -10,7 +10,17 @@
     app:behavior_hideable="true"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_bottom_sheet_expander"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/black_transparent"
+        android:layout_marginTop="@dimen/margin_low_8"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/placeImage"
         android:layout_width="@dimen/place_image_size_80"
         android:layout_height="@dimen/place_image_size_80"
@@ -21,40 +31,56 @@
         app:srcCompat="@drawable/ic_baseline_store_24"
         app:tint="@color/black_transparent"/>
 
-    <TextView
-        android:id="@+id/placeName"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Name"
-        android:textColor="#292929"
-        android:textSize="@dimen/place_name_size_16"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/placeImage"
+        app:layout_constraintEnd_toStartOf="@+id/btnPlaceDetails"
         app:layout_constraintStart_toEndOf="@+id/placeImage"
-        app:layout_constraintTop_toTopOf="@+id/placeImage" />
+        app:layout_constraintTop_toTopOf="@+id/placeImage"
+        android:layout_marginEnd="@dimen/margin_standard_16">
 
-    <TextView
-        android:id="@+id/placeDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Distance"
-        android:textColor="#292929"
-        android:textSize="@dimen/place_name_size_16"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/placeImage"
-        app:layout_constraintTop_toBottomOf="@+id/placeName" />
+        <TextView
+            android:id="@+id/placeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Name"
+            android:textColor="#292929"
+            android:textSize="@dimen/place_name_size_16"
+            app:layout_constraintStart_toEndOf="@+id/placeImage"
+            app:layout_constraintTop_toTopOf="@+id/placeImage"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
-    <TextView
-        android:id="@+id/placeAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Address"
-        android:textColor="#292929"
-        android:textSize="@dimen/place_name_size_16"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/placeImage"
-        app:layout_constraintTop_toBottomOf="@+id/placeDistance" />
+        <TextView
+            android:id="@+id/placeDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Distance"
+            android:textColor="#292929"
+            android:textSize="@dimen/place_name_size_16"
+            app:layout_constraintStart_toEndOf="@+id/placeImage"
+            app:layout_constraintTop_toBottomOf="@+id/placeName" />
+
+        <TextView
+            android:id="@+id/placeAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Address"
+            android:textColor="#292929"
+            android:textSize="@dimen/place_name_size_16"
+            app:layout_constraintStart_toEndOf="@+id/placeImage"
+            app:layout_constraintTop_toBottomOf="@+id/placeDistance"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnPlaceDetails"

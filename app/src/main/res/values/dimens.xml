@@ -5,4 +5,5 @@
     <dimen name="place_name_size_16">16sp</dimen>
     <dimen name="button_text_size_12">12sp</dimen>
     <dimen name="place_image_size_80">80dp</dimen>
+    <dimen name="margin_low_8">8dp</dimen>
 </resources>
