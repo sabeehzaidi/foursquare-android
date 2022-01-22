@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
-import coil.load
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -121,9 +120,9 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     private fun setBottomSheetObserver()
     {
         mapsViewModel.selectedPlace.observe(requireActivity()) { data ->
-            venueName.text = data.name
-            venueAddress.text = data.location?.address ?: "..."
-            venueDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(getString(R.string.distance_away))
+            placeName.text = data.name
+            placeAddress.text = data.location?.address ?: "..."
+            placeDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(getString(R.string.distance_away))
         }
     }
 

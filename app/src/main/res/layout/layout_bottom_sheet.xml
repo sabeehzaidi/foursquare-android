@@ -11,9 +11,9 @@
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <ImageView
-        android:id="@+id/venueImage"
-        android:layout_width="@dimen/venue_image_size_80"
-        android:layout_height="@dimen/venue_image_size_80"
+        android:id="@+id/placeImage"
+        android:layout_width="@dimen/place_image_size_80"
+        android:layout_height="@dimen/place_image_size_80"
         android:layout_marginStart="@dimen/margin_standard_16"
         android:layout_marginTop="@dimen/margin_standard_16"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,49 +22,49 @@
         app:tint="@color/black_transparent"/>
 
     <TextView
-        android:id="@+id/venueName"
+        android:id="@+id/placeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Venue Name"
+        android:text="Name"
         android:textColor="#292929"
-        android:textSize="@dimen/venue_name_size_16"
-        app:layout_constraintStart_toEndOf="@+id/venueImage"
-        app:layout_constraintTop_toTopOf="@+id/venueImage" />
+        android:textSize="@dimen/place_name_size_16"
+        app:layout_constraintStart_toEndOf="@+id/placeImage"
+        app:layout_constraintTop_toTopOf="@+id/placeImage" />
 
     <TextView
-        android:id="@+id/venueDistance"
+        android:id="@+id/placeDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Venue Distance"
+        android:text="Distance"
         android:textColor="#292929"
-        android:textSize="@dimen/venue_name_size_16"
+        android:textSize="@dimen/place_name_size_16"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/venueImage"
-        app:layout_constraintTop_toBottomOf="@+id/venueName" />
+        app:layout_constraintStart_toEndOf="@+id/placeImage"
+        app:layout_constraintTop_toBottomOf="@+id/placeName" />
 
     <TextView
-        android:id="@+id/venueAddress"
+        android:id="@+id/placeAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Venue Address"
+        android:text="Address"
         android:textColor="#292929"
-        android:textSize="@dimen/venue_name_size_16"
+        android:textSize="@dimen/place_name_size_16"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/venueImage"
-        app:layout_constraintTop_toBottomOf="@+id/venueDistance" />
+        app:layout_constraintStart_toEndOf="@+id/placeImage"
+        app:layout_constraintTop_toBottomOf="@+id/placeDistance" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnVenueDetails"
+        android:id="@+id/btnPlaceDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Details"
         android:textSize="@dimen/button_text_size_12"
-        app:layout_constraintBottom_toBottomOf="@+id/venueImage"
+        app:layout_constraintBottom_toBottomOf="@+id/placeImage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/venueImage"
+        app:layout_constraintTop_toTopOf="@+id/placeImage"
         android:layout_marginEnd="@dimen/margin_standard_16"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
