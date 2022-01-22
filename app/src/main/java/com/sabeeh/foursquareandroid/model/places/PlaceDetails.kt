@@ -3,7 +3,7 @@ package com.sabeeh.foursquareandroid.model.places
 import com.google.gson.annotations.SerializedName
 
 
-data class Results (
+data class PlaceDetails (
 
     @SerializedName("fsq_id"         ) var fsqId         : String?           = null,
     @SerializedName("categories"     ) var categories    : ArrayList<Category> = arrayListOf(),
