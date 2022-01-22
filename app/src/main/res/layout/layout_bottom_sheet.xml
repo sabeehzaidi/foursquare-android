@@ -18,7 +18,8 @@
         android:layout_marginTop="@dimen/margin_standard_16"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:srcCompat="@drawable/ic_baseline_store_24"
+        app:tint="@color/black_transparent"/>
 
     <TextView
         android:id="@+id/venueName"
