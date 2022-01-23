@@ -26,13 +26,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_low_8"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/placeImage"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPlaceImage"
         app:layout_constraintEnd_toStartOf="@+id/btnPlaceDetails"
-        app:layout_constraintStart_toEndOf="@+id/placeImage"
-        app:layout_constraintTop_toTopOf="@+id/placeImage">
+        app:layout_constraintStart_toEndOf="@+id/ivPlaceImage"
+        app:layout_constraintTop_toTopOf="@+id/ivPlaceImage">
 
         <TextView
-            android:id="@+id/placeName"
+            android:id="@+id/tvPlaceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -41,12 +41,12 @@
             android:text="Name"
             android:textColor="#292929"
             android:textSize="@dimen/place_name_size_16"
-            app:layout_constraintStart_toEndOf="@+id/placeImage"
-            app:layout_constraintTop_toTopOf="@+id/placeImage"
+            app:layout_constraintStart_toEndOf="@+id/ivPlaceImage"
+            app:layout_constraintTop_toTopOf="@+id/ivPlaceImage"
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/placeDistance"
+            android:id="@+id/tvPlaceDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -54,11 +54,11 @@
             android:text="@string/placeholder_distance"
             android:textColor="#292929"
             android:textSize="@dimen/place_name_size_16"
-            app:layout_constraintStart_toEndOf="@+id/placeImage"
-            app:layout_constraintTop_toBottomOf="@+id/placeName" />
+            app:layout_constraintStart_toEndOf="@+id/ivPlaceImage"
+            app:layout_constraintTop_toBottomOf="@+id/tvPlaceName" />
 
         <TextView
-            android:id="@+id/placeAddress"
+            android:id="@+id/tvPlaceAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -68,13 +68,13 @@
             android:text="@string/placeholder_address"
             android:textColor="#292929"
             android:textSize="@dimen/place_name_size_16"
-            app:layout_constraintStart_toEndOf="@+id/placeImage"
-            app:layout_constraintTop_toBottomOf="@+id/placeDistance" />
+            app:layout_constraintStart_toEndOf="@+id/ivPlaceImage"
+            app:layout_constraintTop_toBottomOf="@+id/tvPlaceDistance" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <ImageView
-        android:id="@+id/placeImage"
+        android:id="@+id/ivPlaceImage"
         android:layout_width="@dimen/place_image_size_80"
         android:layout_height="@dimen/place_image_size_80"
         android:layout_marginStart="@dimen/margin_standard_16"
@@ -90,20 +90,89 @@
         android:layout_height="wrap_content"
         android:text="@string/placeholder_details"
         android:textSize="@dimen/button_text_size_12"
-        app:layout_constraintBottom_toBottomOf="@+id/placeImage"
+        app:layout_constraintBottom_toBottomOf="@+id/ivPlaceImage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/placeImage"
+        app:layout_constraintTop_toTopOf="@+id/ivPlaceImage"
         android:layout_marginEnd="@dimen/margin_standard_16"/>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/appCompatImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llPlaceDetailsRoot"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
-        app:srcCompat="@drawable/ic_baseline_store_24"
-        app:tint="@color/black" />
+        android:layout_margin="@dimen/margin_standard_16"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLblPlaceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/full_name"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPlaceFullName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/margin_low_4"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLblPlaceAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_address"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/margin_low_8"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPlaceFullAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/margin_low_4"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLblPlacePostalCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_postal_code"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/margin_low_8"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPlacePostalCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/margin_low_4"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLblPlaceTimezone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_timezone"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/margin_low_8"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPlaceTimezone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/margin_low_4"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

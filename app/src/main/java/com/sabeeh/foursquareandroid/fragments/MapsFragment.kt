@@ -127,7 +127,6 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
 
     fun updateMap()
     {
-//        mMap.clear()
         clearMapMarkersExceptSelected()
         if(mapReady && places.results.isNotEmpty())
         {
@@ -148,18 +147,22 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     }
 
 
-
     private val _defaultDistanceUnit = "m"
     private fun setBottomSheetObserver()
     {
         mapsViewModel.selectedPlace.observe(requireActivity()) { data ->
-            placeName.text = data.name
-            placeAddress.text = data.location?.address ?: "..."
-            placeDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(
+            tvPlaceName.text = data.name
+            tvPlaceAddress.text = data.location?.address ?: "..."
+            tvPlaceDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(
                 getString(
                     R.string.distance_away
                 )
             )
+            tvPlaceFullAddress.text = data.location?.address.plus(data.location?.locality).plus(data.location?.country)
+            tvPlaceFullName.text = data.name
+            tvPlacePostalCode.text = data.location?.postcode
+            tvPlaceTimezone.text = data.timezone
+
             setBottomSheetState(BottomSheetBehavior.STATE_HALF_EXPANDED)
         }
     }

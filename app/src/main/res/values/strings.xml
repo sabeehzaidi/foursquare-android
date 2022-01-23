@@ -8,4 +8,8 @@
     <string name="placeholder_address">Address</string>
     <string name="placeholder_distance">Distance</string>
     <string name="placeholder_details">Details</string>
+    <string name="placeholder_categories">Categories</string>
+    <string name="full_name">Name</string>
+    <string name="placeholder_postal_code">Postal Code</string>
+    <string name="placeholder_timezone">Timezone</string>
 </resources>
