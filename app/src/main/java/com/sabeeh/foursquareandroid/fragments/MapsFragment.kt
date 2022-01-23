@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sabeeh.foursquareandroid.viewmodel.MapsViewModelFactory
 import com.sabeeh.foursquareandroid.R
-import com.sabeeh.foursquareandroid.data.Repository
+import com.sabeeh.foursquareandroid.data.RepositoryImpl
 import com.sabeeh.foursquareandroid.databinding.FragmentMapsBinding
 import com.sabeeh.foursquareandroid.logging.AnalyticsService
 import com.sabeeh.foursquareandroid.utils.Constants
@@ -34,7 +34,7 @@ import javax.inject.Inject
 class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraIdleListener {
 
     @Inject
-    lateinit var repository: Repository
+    lateinit var repositoryImpl: RepositoryImpl
 
     @Inject
     lateinit var analyticsService : AnalyticsService
@@ -71,7 +71,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnCa
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(mMapCallback)
 
-        mapsViewModelFactory = MapsViewModelFactory(repository)
+        mapsViewModelFactory = MapsViewModelFactory(repositoryImpl)
         mapsViewModel = ViewModelProvider(this, mapsViewModelFactory).get(MapsViewModel::class.java)
 
         setSelectedPlaceObserver()

@@ -6,11 +6,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.sabeeh.foursquareandroid.data.IRepository
 import com.sabeeh.foursquareandroid.location.LocationManagerImpl
-import com.sabeeh.foursquareandroid.data.Repository
 import com.sabeeh.foursquareandroid.model.places.PlacesResponse
 import com.sabeeh.foursquareandroid.model.places.PlaceDetails
-import com.sabeeh.foursquareandroid.utils.Constants
 import com.sabeeh.foursquareandroid.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -22,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MapsViewModel @Inject constructor
     (
-    private val repository: Repository
+    private val repository: IRepository
 ) : ViewModel() {
 
     val mMarkers = HashMap<String, Marker>()
@@ -78,7 +77,7 @@ class MapsViewModel @Inject constructor
                     place ->
                 if(place.geocodes?.main?.longitude != null && place.geocodes?.main?.latitude != null && isInBounds(place, mMap))
                 {
-                    if(!place.name.equals(selectedPlace.value?.name))
+                    if(!place.name.equals(selectedPlace.value?.name)) //to avoid dual markers
                     {
                         val marker = mMap.addMarker(MarkerOptions().position(LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)).title(place.name))
                         marker?.tag = place

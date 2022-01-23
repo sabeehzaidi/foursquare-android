@@ -1,8 +1,6 @@
 package com.sabeeh.foursquareandroid.di
 
-import com.sabeeh.foursquareandroid.data.Repository
 import com.sabeeh.foursquareandroid.data.remote.PlacesApiService
-import com.sabeeh.foursquareandroid.data.remote.RemoteDataSource
 import com.sabeeh.foursquareandroid.utils.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
