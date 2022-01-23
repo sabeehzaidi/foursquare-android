@@ -19,7 +19,11 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
-        var mapsFragment = MapsFragment()
+        val mapsFragment = MapsFragment()
+        replaceFragment(mapsFragment)
+    }
+
+    fun replaceFragment(mapsFragment: Fragment) {
         mainViewModel.replaceFragment(supportFragmentManager, mapsFragment)
     }
 }

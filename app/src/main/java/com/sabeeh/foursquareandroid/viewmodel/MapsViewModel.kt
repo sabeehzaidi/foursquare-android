@@ -8,6 +8,7 @@ import com.sabeeh.foursquareandroid.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.ArrayList
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,6 +32,14 @@ class MapsViewModel @Inject constructor
     fun setSelectedPlace(place: PlaceDetails?)
     {
         _selectedPlace.value = place
+    }
+
+    fun updateCacheData(results: ArrayList<PlaceDetails>) {
+        repository.updateCacheData(results)
+    }
+
+    fun getCacheData() : ArrayList<PlaceDetails> {
+        return repository.getCacheDataAsList()
     }
 
 }

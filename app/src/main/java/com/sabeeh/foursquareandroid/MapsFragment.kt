@@ -21,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sabeeh.foursquareandroid.data.Repository
 import com.sabeeh.foursquareandroid.databinding.FragmentMapsBinding
 import com.sabeeh.foursquareandroid.logging.AnalyticsService
+import com.sabeeh.foursquareandroid.model.places.PlaceDetails
 import com.sabeeh.foursquareandroid.model.places.PlacesResponse
 import com.sabeeh.foursquareandroid.utils.Constants
 import com.sabeeh.foursquareandroid.utils.NetworkResult
@@ -49,12 +50,12 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     private var headerAuth = Constants.FOURSQUARE_API_KEY
     private var params = HashMap<String, String>()
     private var mapReady = false
-    val defaultLocation = LatLng(40.732574046009255,-74.00513697311271)
+    val currentMapCenter = LatLng(40.732574046009255,-74.00513697311271)
 
     private val mMapCallback = OnMapReadyCallback { googleMap ->
         mapReady = true
         mMap = googleMap
-        animateCameraToLocation(defaultLocation)
+        animateCameraToLocation(currentMapCenter)
         mMap.setOnMarkerClickListener(this)
         mMap.setOnInfoWindowClickListener(this)
     }
@@ -89,7 +90,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
             }
         })
 
-        initGetPlacesParams(defaultLocation)
+        initGetPlacesParams(currentMapCenter)
         fetchData(headerAuth, params)
     }
 
@@ -101,9 +102,22 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
                 place ->
                 if(place.geocodes?.main?.longitude != null && place.geocodes?.main?.latitude != null)
                 {
-                    mMap.addMarker(MarkerOptions().position(LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)).title(place.name))
+                    val marker = mMap.addMarker(MarkerOptions().position(LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)).title(place.name))
+                    marker?.tag = place
                 }
             }
+        }
+    }
+
+
+
+    private val _defaultDistanceUnit = "m"
+    private fun setBottomSheetObserver()
+    {
+        mapsViewModel.selectedPlace.observe(requireActivity()) { data ->
+            placeName.text = data.name
+            placeAddress.text = data.location?.address ?: "..."
+            placeDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(getString(R.string.distance_away))
         }
     }
 
@@ -116,16 +130,6 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         mapsViewModel.fetchPlacesResponse(headerAuth, params)
     }
 
-    private val _defaultDistanceUnit = "m"
-    private fun setBottomSheetObserver()
-    {
-        mapsViewModel.selectedPlace.observe(requireActivity()) { data ->
-            placeName.text = data.name
-            placeAddress.text = data.location?.address ?: "..."
-            placeDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(getString(R.string.distance_away))
-        }
-    }
-
     private fun fetchData(headerAuth: String, params : Map<String, String>) {
         fetchResponse(headerAuth, params)
         mapsViewModel.response.observe(requireActivity()) { response ->
@@ -134,6 +138,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
                     response.data?.let {
                         it -> this.places = it
                         analyticsService.logEvent("Response Successful. ${response.data.results}")
+                        mapsViewModel.updateCacheData(response.data.results)
                         updateMap()
                     }
                 }
@@ -166,7 +171,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     override fun onMarkerClick(marker: Marker): Boolean {
         analyticsService.logEvent("Marker ${marker.title} tapped")
         setBottomSheetState(BottomSheetBehavior.STATE_EXPANDED)
-        mapsViewModel.setSelectedPlace(places.results.find { it.name == marker.title })
+        mapsViewModel.setSelectedPlace(marker.tag as PlaceDetails)
         return false
     }
 
