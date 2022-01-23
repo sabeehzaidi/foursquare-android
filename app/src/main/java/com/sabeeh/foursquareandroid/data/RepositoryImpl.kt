@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 
 @ActivityRetainedScoped
-class Repository @Inject constructor(
+class RepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : BaseApiResponse(), IRepository {
 

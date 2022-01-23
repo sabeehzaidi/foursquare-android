@@ -33,7 +33,7 @@ class FakeRepository : IRepository {
     }
 
     override fun updateCacheData(results: ArrayList<PlaceDetails>) {
-        
+
     }
 
     override fun getCacheDataAsList(): ArrayList<PlaceDetails> {

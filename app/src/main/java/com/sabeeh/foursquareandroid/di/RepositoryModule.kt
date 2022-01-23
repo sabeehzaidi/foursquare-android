@@ -1,6 +1,7 @@
 package com.sabeeh.foursquareandroid.di
 
-import com.sabeeh.foursquareandroid.data.Repository
+import com.sabeeh.foursquareandroid.data.IRepository
+import com.sabeeh.foursquareandroid.data.RepositoryImpl
 import com.sabeeh.foursquareandroid.data.remote.PlacesApiService
 import com.sabeeh.foursquareandroid.data.remote.RemoteDataSource
 import dagger.Module
@@ -15,8 +16,8 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideRepository(remoteDataSource : RemoteDataSource) : Repository =
-        Repository(remoteDataSource)
+    fun provideRepository(remoteDataSource : RemoteDataSource) : IRepository =
+        RepositoryImpl(remoteDataSource)
 
     @Singleton
     @Provides
