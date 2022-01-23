@@ -1,6 +1,5 @@
 package com.sabeeh.foursquareandroid.data
 
-import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import com.sabeeh.foursquareandroid.data.remote.RemoteDataSource
 import com.sabeeh.foursquareandroid.model.BaseApiResponse
@@ -12,9 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 import javax.inject.Inject
 
 
@@ -25,7 +21,7 @@ class Repository @Inject constructor(
 
     var places = MutableLiveData<ArrayList<PlaceDetails>>()
     var cacheData = HashMap<String, PlaceDetails>()
-    var mapperArray = ArrayList<PlaceDetails>()
+    var cacheMapper = ArrayList<PlaceDetails>()
 
     suspend fun getPlaces(headerAuth : String, params : Map<String, String>): Flow<NetworkResult<PlacesResponse>> {
         return flow<NetworkResult<PlacesResponse>> {
@@ -45,10 +41,9 @@ class Repository @Inject constructor(
     }
 
     fun getCacheDataAsList(): ArrayList<PlaceDetails> {
-
         val values: Collection<PlaceDetails> = cacheData.values
-        mapperArray = ArrayList(values)
-        return mapperArray
+        cacheMapper = ArrayList(values)
+        return cacheMapper
     }
 
 }

@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.layout_bottom_sheet.bottomSheet
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
+class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraIdleListener {
 
     @Inject
     lateinit var repository: Repository
@@ -50,14 +50,16 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     private var headerAuth = Constants.FOURSQUARE_API_KEY
     private var params = HashMap<String, String>()
     private var mapReady = false
-    val currentMapCenter = LatLng(40.732574046009255,-74.00513697311271)
+
 
     private val mMapCallback = OnMapReadyCallback { googleMap ->
         mapReady = true
         mMap = googleMap
-        animateCameraToLocation(currentMapCenter)
+        animateCameraToLocation(mapsViewModel.getLocation())
         mMap.setOnMarkerClickListener(this)
         mMap.setOnInfoWindowClickListener(this)
+        mMap.setOnCameraMoveListener(this)
+        mMap.setOnCameraIdleListener(this)
     }
 
     override fun onCreateView(
@@ -90,8 +92,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
             }
         })
 
-        initGetPlacesParams(currentMapCenter)
-        fetchData(headerAuth, params)
+        setLocationParamsForApiQuery(mapsViewModel.getLocation())
     }
 
     fun updateMap()
@@ -121,16 +122,17 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         }
     }
 
-    private fun initGetPlacesParams(defaultLocation: LatLng)
+    private fun setLocationParamsForApiQuery(location: LatLng)
     {
-        params.put("ll", "${defaultLocation.latitude},${defaultLocation.longitude}")
+        analyticsService.logEvent("New Map Center: ${location.latitude},${location.longitude}")
+        params.put("ll", "${location.latitude},${location.longitude}")
     }
 
     private fun fetchResponse(headerAuth : String, params : Map<String, String>) {
         mapsViewModel.fetchPlacesResponse(headerAuth, params)
     }
 
-    private fun fetchData(headerAuth: String, params : Map<String, String>) {
+    private fun fetchDataForNewCameraCenter(headerAuth: String, params : Map<String, String>) {
         fetchResponse(headerAuth, params)
         mapsViewModel.response.observe(requireActivity()) { response ->
             when (response) {
@@ -184,5 +186,14 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         analyticsService.logEvent("Info for ${marker.title} tapped")
     }
 
+    override fun onCameraMove() {
+        analyticsService.logEvent("On Camera Moved")
+    }
+
+    override fun onCameraIdle() {
+        setLocationParamsForApiQuery(mMap.projection.visibleRegion.latLngBounds.center)
+        fetchDataForNewCameraCenter(headerAuth, params)
+        analyticsService.logEvent("On Camera Move Stopped")
+    }
 
 }

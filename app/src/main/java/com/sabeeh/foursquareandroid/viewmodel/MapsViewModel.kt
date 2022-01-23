@@ -1,6 +1,8 @@
 package com.sabeeh.foursquareandroid.viewmodel
 
 import androidx.lifecycle.*
+import com.google.android.gms.maps.model.LatLng
+import com.sabeeh.foursquareandroid.location.LocationManagerImpl
 import com.sabeeh.foursquareandroid.data.Repository
 import com.sabeeh.foursquareandroid.model.places.PlacesResponse
 import com.sabeeh.foursquareandroid.model.places.PlaceDetails
@@ -23,6 +25,8 @@ class MapsViewModel @Inject constructor
     private val _selectedPlace: MutableLiveData<PlaceDetails> = MutableLiveData()
     val selectedPlace: LiveData<PlaceDetails> = _selectedPlace
 
+    private val locationManager = LocationManagerImpl()
+
     fun fetchPlacesResponse(headerAuth : String, params : Map<String, String>) = viewModelScope.launch {
         repository.getPlaces(headerAuth, params).collect {
             values -> _response.value = values
@@ -40,6 +44,11 @@ class MapsViewModel @Inject constructor
 
     fun getCacheData() : ArrayList<PlaceDetails> {
         return repository.getCacheDataAsList()
+    }
+
+    fun getLocation() : LatLng
+    {
+        return locationManager.getLocation()
     }
 
 }
