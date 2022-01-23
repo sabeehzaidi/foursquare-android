@@ -2,13 +2,76 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="#ffffff"
     android:paddingBottom="@dimen/margin_standard_16"
     android:id="@+id/bottomSheet"
     app:behavior_peekHeight="0dp"
     app:behavior_hideable="true"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/margin_low_8"
+        app:srcCompat="@drawable/ic_bottom_sheet_expander"
+        app:tint="@color/black_transparent" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_low_8"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/placeImage"
+        app:layout_constraintEnd_toStartOf="@+id/btnPlaceDetails"
+        app:layout_constraintStart_toEndOf="@+id/placeImage"
+        app:layout_constraintTop_toTopOf="@+id/placeImage">
+
+        <TextView
+            android:id="@+id/placeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Name"
+            android:textColor="#292929"
+            android:textSize="@dimen/place_name_size_16"
+            app:layout_constraintStart_toEndOf="@+id/placeImage"
+            app:layout_constraintTop_toTopOf="@+id/placeImage"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/placeDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/placeholder_distance"
+            android:textColor="#292929"
+            android:textSize="@dimen/place_name_size_16"
+            app:layout_constraintStart_toEndOf="@+id/placeImage"
+            app:layout_constraintTop_toBottomOf="@+id/placeName" />
+
+        <TextView
+            android:id="@+id/placeAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/placeholder_address"
+            android:textColor="#292929"
+            android:textSize="@dimen/place_name_size_16"
+            app:layout_constraintStart_toEndOf="@+id/placeImage"
+            app:layout_constraintTop_toBottomOf="@+id/placeDistance" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <ImageView
         android:id="@+id/placeImage"
@@ -21,50 +84,26 @@
         app:srcCompat="@drawable/ic_baseline_store_24"
         app:tint="@color/black_transparent"/>
 
-    <TextView
-        android:id="@+id/placeName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Name"
-        android:textColor="#292929"
-        android:textSize="@dimen/place_name_size_16"
-        app:layout_constraintStart_toEndOf="@+id/placeImage"
-        app:layout_constraintTop_toTopOf="@+id/placeImage" />
-
-    <TextView
-        android:id="@+id/placeDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Distance"
-        android:textColor="#292929"
-        android:textSize="@dimen/place_name_size_16"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/placeImage"
-        app:layout_constraintTop_toBottomOf="@+id/placeName" />
-
-    <TextView
-        android:id="@+id/placeAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Address"
-        android:textColor="#292929"
-        android:textSize="@dimen/place_name_size_16"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/placeImage"
-        app:layout_constraintTop_toBottomOf="@+id/placeDistance" />
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnPlaceDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Details"
+        android:text="@string/placeholder_details"
         android:textSize="@dimen/button_text_size_12"
         app:layout_constraintBottom_toBottomOf="@+id/placeImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/placeImage"
         android:layout_marginEnd="@dimen/margin_standard_16"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
+        app:srcCompat="@drawable/ic_baseline_store_24"
+        app:tint="@color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
