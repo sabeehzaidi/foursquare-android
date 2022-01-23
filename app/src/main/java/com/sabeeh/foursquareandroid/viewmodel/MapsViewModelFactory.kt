@@ -1,9 +1,8 @@
-package com.sabeeh.foursquareandroid
+package com.sabeeh.foursquareandroid.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sabeeh.foursquareandroid.data.Repository
-import com.sabeeh.foursquareandroid.viewmodel.MapsViewModel
 import java.lang.IllegalArgumentException
 
 class MapsViewModelFactory(private val repository: Repository): ViewModelProvider.Factory {

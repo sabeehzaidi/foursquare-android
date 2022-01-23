@@ -17,7 +17,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.sabeeh.foursquareandroid.MapsViewModelFactory
+import com.sabeeh.foursquareandroid.viewmodel.MapsViewModelFactory
 import com.sabeeh.foursquareandroid.R
 import com.sabeeh.foursquareandroid.data.Repository
 import com.sabeeh.foursquareandroid.databinding.FragmentMapsBinding
@@ -126,7 +126,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnCa
         mapsViewModel.selectedPlace.observe(requireActivity()) { data ->
             tvPlaceName.text = data.name
             tvPlaceAddress.text = data.location?.address ?: "..."
-            tvPlaceDistance.text = data.distance.toString().plus(mapsViewModel.defaultDistanceUnit).plus(
+            tvPlaceDistance.text = data.distance.toString().plus(Constants.DEFAULT_DISTANCE_UNIT).plus(
                 getString(
                     R.string.distance_away
                 )
