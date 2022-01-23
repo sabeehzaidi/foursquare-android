@@ -17,20 +17,19 @@ import javax.inject.Inject
 @ActivityRetainedScoped
 class Repository @Inject constructor(
     private val remoteDataSource: RemoteDataSource
-) : BaseApiResponse() {
+) : BaseApiResponse(), IRepository {
 
     var places = MutableLiveData<ArrayList<PlaceDetails>>()
     var cacheData = HashMap<String, PlaceDetails>()
     var cacheMapper = ArrayList<PlaceDetails>()
 
-    suspend fun getPlaces(headerAuth : String, params : Map<String, String>): Flow<NetworkResult<PlacesResponse>> {
+    override suspend fun getPlaces(headerAuth : String, params : Map<String, String>): Flow<NetworkResult<PlacesResponse>> {
         return flow<NetworkResult<PlacesResponse>> {
             emit(safeApiCall { remoteDataSource.getPlaces(headerAuth, params) })
         }.flowOn(Dispatchers.IO)
     }
 
-    fun updateCacheData(results: ArrayList<PlaceDetails>) {
-        //Add to HashMap if a place by that name doesn't exist already
+    override fun updateCacheData(results: ArrayList<PlaceDetails>) {
         for(place in results)
         {
             if(!cacheData.contains(place.name))
@@ -40,7 +39,7 @@ class Repository @Inject constructor(
         }
     }
 
-    fun getCacheDataAsList(): ArrayList<PlaceDetails> {
+    override fun getCacheDataAsList(): ArrayList<PlaceDetails> {
         val values: Collection<PlaceDetails> = cacheData.values
         cacheMapper = ArrayList(values)
         return cacheMapper
