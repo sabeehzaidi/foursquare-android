@@ -29,7 +29,7 @@ class MapsViewModel @Inject constructor
     var places = PlacesResponse()
     var mapReady = false
     var prevMarker: Marker? = null
-    val _defaultDistanceUnit = "m"
+    val defaultDistanceUnit = "m"
 
     private val _response: MutableLiveData<NetworkResult<PlacesResponse>> = MutableLiveData()
     val response: LiveData<NetworkResult<PlacesResponse>> = _response

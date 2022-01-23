@@ -69,12 +69,19 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnCa
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment?.getMapAsync(mMapCallback)
 
         mapsViewModelFactory = MapsViewModelFactory(repository)
         mapsViewModel = ViewModelProvider(this, mapsViewModelFactory).get(MapsViewModel::class.java)
 
-        mapFragment?.getMapAsync(mMapCallback)
         setSelectedPlaceObserver()
+        initBottomSheet()
+
+        setLocationParamsForApiQuery(mapsViewModel.getLocation())
+        fetchDataFromServer(headerAuth, params)
+    }
+
+    fun initBottomSheet() {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         setBottomSheetPreferences()
         setBottomSheetState(BottomSheetBehavior.STATE_COLLAPSED)
@@ -88,15 +95,12 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnCa
                 analyticsService.logEvent("New State: $newState")
             }
         })
-
         btnPlaceDetails.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View?) {
                 setBottomSheetState(BottomSheetBehavior.STATE_EXPANDED)
             }
 
         })
-        setLocationParamsForApiQuery(mapsViewModel.getLocation())
-        fetchDataFromServer(headerAuth, params)
     }
 
     fun setBottomSheetPreferences()
@@ -122,7 +126,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnCa
         mapsViewModel.selectedPlace.observe(requireActivity()) { data ->
             tvPlaceName.text = data.name
             tvPlaceAddress.text = data.location?.address ?: "..."
-            tvPlaceDistance.text = data.distance.toString().plus(mapsViewModel._defaultDistanceUnit).plus(
+            tvPlaceDistance.text = data.distance.toString().plus(mapsViewModel.defaultDistanceUnit).plus(
                 getString(
                     R.string.distance_away
                 )
