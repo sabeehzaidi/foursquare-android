@@ -14,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -29,6 +30,7 @@ import com.sabeeh.foursquareandroid.viewmodel.MapsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_bottom_sheet.*
 import kotlinx.android.synthetic.main.layout_bottom_sheet.bottomSheet
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,7 +45,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     private lateinit var mapsViewModel: MapsViewModel
     private lateinit var mapsViewModelFactory: MapsViewModelFactory
     private lateinit var _binding: FragmentMapsBinding
-    private lateinit var places: PlacesResponse
+    private var places = PlacesResponse()
     private lateinit var mMap : GoogleMap
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
@@ -51,6 +53,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     private var params = HashMap<String, String>()
     private var mapReady = false
 
+    private var prevMarker: Marker? = null
 
     private val mMapCallback = OnMapReadyCallback { googleMap ->
         mapReady = true
@@ -93,12 +96,13 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         })
 
         setLocationParamsForApiQuery(mapsViewModel.getLocation())
+        fetchDataFromServer(headerAuth, params)
     }
 
     fun updateMap()
     {
         mMap.clear()
-        if(mapReady && this::places.isInitialized && places.results.isNotEmpty())
+        if(mapReady && places.results.isNotEmpty())
         {
             places.results.forEach() {
                 place ->
@@ -138,10 +142,10 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         mapsViewModel.response.observe(requireActivity()) { response ->
             when (response) {
                 is NetworkResult.Success -> {
-                    response.data?.let {
-                        it -> this.places = it
+                    response.data?.let { _ ->
                         analyticsService.logEvent("Response Successful. ${response.data.results}")
                         mapsViewModel.updateCacheData(response.data.results)
+                        this.places.results = mapsViewModel.getCacheData()
                         updateMap()
                     }
                 }
@@ -165,9 +169,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
 
     private fun animateCameraToLocation(currentLocation: LatLng) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
-        // Zoom in, animating the camera.
         mMap.animateCamera(CameraUpdateFactory.zoomIn())
-        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15f), 2000, null)
     }
 
@@ -175,7 +177,19 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         analyticsService.logEvent("Marker ${marker.title} tapped")
         setBottomSheetState(BottomSheetBehavior.STATE_EXPANDED)
         mapsViewModel.setSelectedPlace(marker.tag as PlaceDetails)
-        return false
+        if(prevMarker != null)
+        {
+            try {
+                prevMarker?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+            }
+            catch (ex: IllegalArgumentException)
+            {
+                ex.printStackTrace()
+            }
+        }
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        prevMarker = marker
+        return true
     }
 
     fun setBottomSheetState(state: Int)
@@ -195,16 +209,13 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         analyticsService.logEvent("On Camera Move Stopped")
         setLocationParamsForApiQuery(mMap.projection.visibleRegion.latLngBounds.center)
         fetchDataFromCache()
-        fetchDataFromServer(headerAuth, params)
+        fetchResponse(headerAuth, params)
         updateMap()
     }
 
     fun fetchDataFromCache()
     {
-        if(this::places.isInitialized)
-        {
-            this.places.results = mapsViewModel.getCacheData()
-        }
+        this.places.results = mapsViewModel.getCacheData()
     }
 
     fun isInBounds(place : PlaceDetails) : Boolean
@@ -212,11 +223,9 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         val bounds = LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)
         if(mMap.projection.visibleRegion.latLngBounds.contains(bounds))
         {
-            analyticsService.logEvent("${place.name} is in bounds")
             return true
         }
 
-        analyticsService.logEvent("${place.name} is NOT in bounds")
         return false
     }
 
