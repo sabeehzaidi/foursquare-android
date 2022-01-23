@@ -30,7 +30,7 @@ class Repository @Inject constructor(
     }
 
     fun updateCacheData(results: ArrayList<PlaceDetails>) {
-        //Add to HashMap if a place by that name doesn't exist already
+
         for(place in results)
         {
             if(!cacheData.contains(place.name))

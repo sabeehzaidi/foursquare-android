@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.sabeeh.foursquareandroid.MainActivity
 import com.sabeeh.foursquareandroid.MapsViewModelFactory
 import com.sabeeh.foursquareandroid.R
 import com.sabeeh.foursquareandroid.data.Repository
@@ -28,12 +29,16 @@ import com.sabeeh.foursquareandroid.model.places.PlaceDetails
 import com.sabeeh.foursquareandroid.model.places.PlacesResponse
 import com.sabeeh.foursquareandroid.utils.Constants
 import com.sabeeh.foursquareandroid.utils.NetworkResult
+import com.sabeeh.foursquareandroid.viewmodel.MainViewModel
 import com.sabeeh.foursquareandroid.viewmodel.MapsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_bottom_sheet.*
 import kotlinx.android.synthetic.main.layout_bottom_sheet.bottomSheet
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
+
+
+
 
 @AndroidEntryPoint
 class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraIdleListener {
@@ -46,16 +51,15 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
 
     private val mMarkers = HashMap<String, Marker>()
     private lateinit var mapsViewModel: MapsViewModel
+    private lateinit var mainViewModel: MainViewModel
     private lateinit var mapsViewModelFactory: MapsViewModelFactory
     private lateinit var _binding: FragmentMapsBinding
     private var places = PlacesResponse()
     private lateinit var mMap : GoogleMap
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
-
     private var headerAuth = Constants.FOURSQUARE_API_KEY
     private var params = HashMap<String, String>()
     private var mapReady = false
-
     private var prevMarker: Marker? = null
 
     private val mMapCallback = OnMapReadyCallback { googleMap ->
@@ -83,6 +87,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
 
         mapsViewModelFactory = MapsViewModelFactory(repository)
         mapsViewModel = ViewModelProvider(this, mapsViewModelFactory).get(MapsViewModel::class.java)
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         mapFragment?.getMapAsync(mMapCallback)
         setBottomSheetObserver()
 
@@ -98,6 +103,10 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
             }
         })
 
+        btnPlaceDetails.setOnClickListener {
+            (activity as MainActivity).replaceFragment(PlaceDetailsFragment())
+        }
+
         setLocationParamsForApiQuery(mapsViewModel.getLocation())
         fetchDataFromServer(headerAuth, params)
     }
@@ -105,7 +114,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     fun clearMapMarkersExceptSelected()
     {
         mMarkers.forEach() {
-            if(!it.value.title.equals(mapsViewModel.selectedPlace.value?.name))
+            if(!it.value.title.equals(mainViewModel.selectedPlace.value?.name))
             {
                 it.value.remove()
             }
@@ -122,7 +131,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
                 place ->
                 if(place.geocodes?.main?.longitude != null && place.geocodes?.main?.latitude != null && isInBounds(place))
                 {
-                    if(!place.name.equals(mapsViewModel.selectedPlace.value?.name))
+                    if(!place.name.equals(mainViewModel.selectedPlace.value?.name))
                     {
                         val marker = mMap.addMarker(MarkerOptions().position(LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)).title(place.name))
                         marker?.tag = place
@@ -139,7 +148,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     private val _defaultDistanceUnit = "m"
     private fun setBottomSheetObserver()
     {
-        mapsViewModel.selectedPlace.observe(requireActivity()) { data ->
+        mainViewModel.selectedPlace.observe(requireActivity()) { data ->
             placeName.text = data.name
             placeAddress.text = data.location?.address ?: "..."
             placeDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(getString(
@@ -197,7 +206,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     override fun onMarkerClick(marker: Marker): Boolean {
         analyticsService.logEvent("Marker ${marker.title} tapped")
         setBottomSheetState(BottomSheetBehavior.STATE_EXPANDED)
-        mapsViewModel.setSelectedPlace(marker.tag as PlaceDetails)
+        mainViewModel.setSelectedPlace(marker.tag as PlaceDetails)
         if(prevMarker != null)
         {
             try {

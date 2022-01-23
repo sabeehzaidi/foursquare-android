@@ -22,20 +22,12 @@ class MapsViewModel @Inject constructor
     private val _response: MutableLiveData<NetworkResult<PlacesResponse>> = MutableLiveData()
     val response: LiveData<NetworkResult<PlacesResponse>> = _response
 
-    private val _selectedPlace: MutableLiveData<PlaceDetails> = MutableLiveData()
-    val selectedPlace: LiveData<PlaceDetails> = _selectedPlace
-
     private val locationManager = LocationManagerImpl()
 
     fun fetchPlacesResponse(headerAuth : String, params : Map<String, String>) = viewModelScope.launch {
         repository.getPlaces(headerAuth, params).collect {
             values -> _response.value = values
         }
-    }
-
-    fun setSelectedPlace(place: PlaceDetails?)
-    {
-        _selectedPlace.value = place
     }
 
     fun updateCacheData(results: ArrayList<PlaceDetails>) {
