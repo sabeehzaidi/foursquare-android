@@ -33,6 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_bottom_sheet.*
 import kotlinx.android.synthetic.main.layout_bottom_sheet.bottomSheet
 import java.lang.IllegalArgumentException
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,6 +45,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     @Inject
     lateinit var analyticsService : AnalyticsService
 
+    private val mMarkers = HashMap<String, Marker>()
     private lateinit var mapsViewModel: MapsViewModel
     private lateinit var mapsViewModelFactory: MapsViewModelFactory
     private lateinit var _binding: FragmentMapsBinding
@@ -101,17 +103,33 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         fetchDataFromServer(headerAuth, params)
     }
 
+    fun clearMapMarkersExceptSelected()
+    {
+        mMarkers.forEach() {
+            if(!it.value.title.equals(mapsViewModel.selectedPlace.value?.name))
+            {
+                it.value.remove()
+            }
+        }
+    }
+
     fun updateMap()
     {
-        mMap.clear()
+//        mMap.clear()
+        clearMapMarkersExceptSelected()
         if(mapReady && places.results.isNotEmpty())
         {
             places.results.forEach() {
                 place ->
                 if(place.geocodes?.main?.longitude != null && place.geocodes?.main?.latitude != null && isInBounds(place))
                 {
-                    val marker = mMap.addMarker(MarkerOptions().position(LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)).title(place.name))
-                    marker?.tag = place
+                    if(!place.name.equals(mapsViewModel.selectedPlace.value?.name))
+                    {
+                        val marker = mMap.addMarker(MarkerOptions().position(LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)).title(place.name))
+                        marker?.tag = place
+                        mMarkers.put(place.name.toString(), marker!!)
+                    }
+
                 }
             }
         }
