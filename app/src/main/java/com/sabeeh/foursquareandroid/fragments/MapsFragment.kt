@@ -1,4 +1,4 @@
-package com.sabeeh.foursquareandroid
+package com.sabeeh.foursquareandroid.fragments
 
 import androidx.fragment.app.Fragment
 
@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.sabeeh.foursquareandroid.MapsViewModelFactory
+import com.sabeeh.foursquareandroid.R
 import com.sabeeh.foursquareandroid.data.Repository
 import com.sabeeh.foursquareandroid.databinding.FragmentMapsBinding
 import com.sabeeh.foursquareandroid.logging.AnalyticsService
@@ -123,7 +125,9 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         mapsViewModel.selectedPlace.observe(requireActivity()) { data ->
             placeName.text = data.name
             placeAddress.text = data.location?.address ?: "..."
-            placeDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(getString(R.string.distance_away))
+            placeDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(getString(
+                R.string.distance_away
+            ))
         }
     }
 

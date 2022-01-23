@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.sabeeh.foursquareandroid.databinding.ActivityMainBinding
+import com.sabeeh.foursquareandroid.fragments.MapsFragment
 import com.sabeeh.foursquareandroid.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

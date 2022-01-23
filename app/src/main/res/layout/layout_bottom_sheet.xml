@@ -11,27 +11,28 @@
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/margin_low_8"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/placeImage"
         app:layout_constraintEnd_toStartOf="@+id/btnPlaceDetails"
         app:layout_constraintStart_toEndOf="@+id/placeImage"
-        app:layout_constraintTop_toTopOf="@+id/placeImage"
-        android:layout_marginEnd="@dimen/margin_low_8">
+        app:layout_constraintTop_toTopOf="@+id/placeImage">
 
         <TextView
             android:id="@+id/placeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="Name"
             android:textColor="#292929"
             android:textSize="@dimen/place_name_size_16"
             app:layout_constraintStart_toEndOf="@+id/placeImage"
-            app:layout_constraintTop_toTopOf="@+id/placeImage"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            app:layout_constraintTop_toTopOf="@+id/placeImage" />
 
         <TextView
             android:id="@+id/placeDistance"
@@ -51,13 +52,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/placeholder_address"
             android:textColor="#292929"
             android:textSize="@dimen/place_name_size_16"
             app:layout_constraintStart_toEndOf="@+id/placeImage"
-            app:layout_constraintTop_toBottomOf="@+id/placeDistance"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            app:layout_constraintTop_toBottomOf="@+id/placeDistance" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
