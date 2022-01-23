@@ -97,11 +97,12 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
 
     fun updateMap()
     {
-        if(mapReady && places.results.isNotEmpty())
+        mMap.clear()
+        if(mapReady && this::places.isInitialized && places.results.isNotEmpty())
         {
             places.results.forEach() {
                 place ->
-                if(place.geocodes?.main?.longitude != null && place.geocodes?.main?.latitude != null)
+                if(place.geocodes?.main?.longitude != null && place.geocodes?.main?.latitude != null && isInBounds(place))
                 {
                     val marker = mMap.addMarker(MarkerOptions().position(LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)).title(place.name))
                     marker?.tag = place
@@ -132,7 +133,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         mapsViewModel.fetchPlacesResponse(headerAuth, params)
     }
 
-    private fun fetchDataForNewCameraCenter(headerAuth: String, params : Map<String, String>) {
+    private fun fetchDataFromServer(headerAuth: String, params : Map<String, String>) {
         fetchResponse(headerAuth, params)
         mapsViewModel.response.observe(requireActivity()) { response ->
             when (response) {
@@ -191,9 +192,32 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     }
 
     override fun onCameraIdle() {
-        setLocationParamsForApiQuery(mMap.projection.visibleRegion.latLngBounds.center)
-        fetchDataForNewCameraCenter(headerAuth, params)
         analyticsService.logEvent("On Camera Move Stopped")
+        setLocationParamsForApiQuery(mMap.projection.visibleRegion.latLngBounds.center)
+        fetchDataFromCache()
+        fetchDataFromServer(headerAuth, params)
+        updateMap()
+    }
+
+    fun fetchDataFromCache()
+    {
+        if(this::places.isInitialized)
+        {
+            this.places.results = mapsViewModel.getCacheData()
+        }
+    }
+
+    fun isInBounds(place : PlaceDetails) : Boolean
+    {
+        val bounds = LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)
+        if(mMap.projection.visibleRegion.latLngBounds.contains(bounds))
+        {
+            analyticsService.logEvent("${place.name} is in bounds")
+            return true
+        }
+
+        analyticsService.logEvent("${place.name} is NOT in bounds")
+        return false
     }
 
 }
