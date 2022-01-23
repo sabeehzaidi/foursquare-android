@@ -5,4 +5,7 @@
     <string name="refresh">Refresh</string>
     <string name="dogs">Dogs</string>
     <string name="distance_away">\ away</string>
+    <string name="placeholder_address">Address</string>
+    <string name="placeholder_distance">Distance</string>
+    <string name="placeholder_details">Details</string>
 </resources>
