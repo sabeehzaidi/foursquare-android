@@ -77,7 +77,7 @@ class MapsViewModel @Inject constructor
                     place ->
                 if(place.geocodes?.main?.longitude != null && place.geocodes?.main?.latitude != null && isInBounds(place, mMap))
                 {
-                    if(!place.name.equals(selectedPlace.value?.name))
+                    if(!place.name.equals(selectedPlace.value?.name)) //to avoid dual markers
                     {
                         val marker = mMap.addMarker(MarkerOptions().position(LatLng(place.geocodes?.main?.latitude!!, place.geocodes?.main?.longitude!!)).title(place.name))
                         marker?.tag = place

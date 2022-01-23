@@ -12,5 +12,4 @@ class MapsViewModelTest {
     {
         viewModel = MapsViewModel(FakeRepository())
     }
-
 }
