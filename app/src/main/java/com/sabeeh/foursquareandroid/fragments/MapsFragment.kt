@@ -87,6 +87,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         setBottomSheetObserver()
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        setBottomSheetPreferences()
         setBottomSheetState(BottomSheetBehavior.STATE_COLLAPSED)
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
@@ -98,8 +99,20 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
             }
         })
 
+        btnPlaceDetails.setOnClickListener(object: View.OnClickListener {
+            override fun onClick(v: View?) {
+                setBottomSheetState(BottomSheetBehavior.STATE_EXPANDED)
+            }
+
+        })
         setLocationParamsForApiQuery(mapsViewModel.getLocation())
         fetchDataFromServer(headerAuth, params)
+    }
+
+    fun setBottomSheetPreferences()
+    {
+        bottomSheetBehavior.isFitToContents = false
+        bottomSheetBehavior.halfExpandedRatio = 0.15f
     }
 
     fun clearMapMarkersExceptSelected()
@@ -142,9 +155,12 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
         mapsViewModel.selectedPlace.observe(requireActivity()) { data ->
             placeName.text = data.name
             placeAddress.text = data.location?.address ?: "..."
-            placeDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(getString(
-                R.string.distance_away
-            ))
+            placeDistance.text = data.distance.toString().plus(_defaultDistanceUnit).plus(
+                getString(
+                    R.string.distance_away
+                )
+            )
+            setBottomSheetState(BottomSheetBehavior.STATE_HALF_EXPANDED)
         }
     }
 
@@ -152,6 +168,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
     {
         analyticsService.logEvent("New Map Center: ${location.latitude},${location.longitude}")
         params.put("ll", "${location.latitude},${location.longitude}")
+        params.put("limit", Constants.PLACES_RESPONSE_LIMIT.toString())
     }
 
     private fun fetchResponse(headerAuth : String, params : Map<String, String>) {
@@ -196,7 +213,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener, GoogleMap.OnIn
 
     override fun onMarkerClick(marker: Marker): Boolean {
         analyticsService.logEvent("Marker ${marker.title} tapped")
-        setBottomSheetState(BottomSheetBehavior.STATE_EXPANDED)
+        setBottomSheetState(BottomSheetBehavior.STATE_HALF_EXPANDED)
         mapsViewModel.setSelectedPlace(marker.tag as PlaceDetails)
         if(prevMarker != null)
         {

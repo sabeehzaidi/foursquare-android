@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="#ffffff"
     android:paddingBottom="@dimen/margin_standard_16"
     android:id="@+id/bottomSheet"
@@ -10,10 +10,20 @@
     app:behavior_hideable="true"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/margin_low_8"
+        app:srcCompat="@drawable/ic_bottom_sheet_expander"
+        app:tint="@color/black_transparent" />
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_low_8"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/placeImage"
@@ -32,7 +42,8 @@
             android:textColor="#292929"
             android:textSize="@dimen/place_name_size_16"
             app:layout_constraintStart_toEndOf="@+id/placeImage"
-            app:layout_constraintTop_toTopOf="@+id/placeImage" />
+            app:layout_constraintTop_toTopOf="@+id/placeImage"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/placeDistance"
@@ -83,5 +94,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/placeImage"
         android:layout_marginEnd="@dimen/margin_standard_16"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
+        app:srcCompat="@drawable/ic_baseline_store_24"
+        app:tint="@color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
